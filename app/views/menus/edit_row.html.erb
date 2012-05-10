@@ -26,7 +26,7 @@
     <td><%= picture.path %></td>
     <td><%= picture.tags.map{|t| t.name + ' '}.to_s.strip.gsub(/ /, ', ') %></td>
     <td><%= image_tag "menu_items/#{picture.path}", :height => '42px', :width => '42px' %></td>
-    <td><%= link_to 'Use This Picture', "/menus/#{@menu.id}/row/#{@index}/update?picture_id=#{picture.id}" %> | </td>
+    <td><%= link_to 'Use This Picture', "/menus/#{@menu.id}/row/#{@index}/update?picture_id=#{picture.id}" %></td>
     <td><%= link_to 'Edit Tags', edit_picture_path(picture) %></td>
   </tr>
 <% end %>
@@ -50,7 +50,7 @@
     <td><%= picture.path %></td>
     <td><%= picture.tags.map{|t| t.name + ' '}.to_s.strip.gsub(/ /, ', ') %></td>
     <td><%= image_tag "menu_items/#{picture.path}", :height => '42px', :width => '42px' %></td>
-    <td><%= link_to 'Use This Picture', "/menus/#{@menu.id}/row/#{@index}/update?picture_id=#{picture.id}" %> | </td>
+    <td><%= link_to 'Use This Picture', "/menus/#{@menu.id}/row/#{@index}/update?picture_id=#{picture.id}" %></td>
     <td><%= link_to 'Edit Tags', edit_picture_path(picture) %></td>
   </tr>
 <% end %>
@@ -74,7 +74,7 @@
     <td><%= picture.path %></td>
     <td><%= picture.tags.map{|t| t.name + ' '}.to_s.strip.gsub(/ /, ', ') %></td>
     <td><%= image_tag "menu_items/#{picture.path}", :height => '42px', :width => '42px' %></td>
-    <td><%= link_to 'Use This Picture', "/menus/#{@menu.id}/row/#{@index}/update?picture_id=#{picture.id}" %> | </td>
+    <td><%= link_to 'Use This Picture', "/menus/#{@menu.id}/row/#{@index}/update?picture_id=#{picture.id}" %></td>
     <td><%= link_to 'Edit Tags', edit_picture_path(picture) %></td>
   </tr>
 <% end %>
