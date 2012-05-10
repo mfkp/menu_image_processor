@@ -1,0 +1,82 @@
+<h2>Edit Row</h2>
+<table>
+	<tr>
+		<th>Product Name</th>
+	</tr>
+	<tr>
+		<td><%= @row[2] %></td>
+	</tr>
+
+</table>
+
+<% if @exact.present? %>
+<h1>Best Bet</h1>
+
+<table>
+  <tr>
+    <th>Picture</th>
+    <th>Tags</th>
+    <th>Preview</th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @exact.each do |picture| %>
+  <tr>
+    <td><%= picture.path %></td>
+    <td><%= picture.tags.map{|t| t.name + ' '}.to_s.strip.gsub(/ /, ', ') %></td>
+    <td><%= image_tag "menu_items/#{picture.path}", :height => '42px', :width => '42px' %></td>
+    <td><%= link_to 'Use This Picture', "/menus/#{@menu.id}/row/#{@index}/update?picture_id=#{picture.id}" %> | </td>
+    <td><%= link_to 'Edit Tags', edit_picture_path(picture) %></td>
+  </tr>
+<% end %>
+</table>
+<% end %>
+
+
+<% if @close.present? %>
+<h1>Something good might be in here</h1>
+
+<table>
+  <tr>
+    <th>Picture</th>
+    <th>Tags</th>
+    <th>Preview</th>
+    <th></th>
+  </tr>
+
+<% @close.each do |picture| %>
+  <tr>
+    <td><%= picture.path %></td>
+    <td><%= picture.tags.map{|t| t.name + ' '}.to_s.strip.gsub(/ /, ', ') %></td>
+    <td><%= image_tag "menu_items/#{picture.path}", :height => '42px', :width => '42px' %></td>
+    <td><%= link_to 'Use This Picture', "/menus/#{@menu.id}/row/#{@index}/update?picture_id=#{picture.id}" %> | </td>
+    <td><%= link_to 'Edit Tags', edit_picture_path(picture) %></td>
+  </tr>
+<% end %>
+</table>
+<% end %>
+
+
+<% if @maybe.present? %>
+<h1>The scraps...</h1>
+
+<table>
+  <tr>
+    <th>Picture</th>
+    <th>Tags</th>
+    <th>Preview</th>
+    <th></th>
+  </tr>
+
+<% @maybe.each do |picture| %>
+  <tr>
+    <td><%= picture.path %></td>
+    <td><%= picture.tags.map{|t| t.name + ' '}.to_s.strip.gsub(/ /, ', ') %></td>
+    <td><%= image_tag "menu_items/#{picture.path}", :height => '42px', :width => '42px' %></td>
+    <td><%= link_to 'Use This Picture', "/menus/#{@menu.id}/row/#{@index}/update?picture_id=#{picture.id}" %> | </td>
+    <td><%= link_to 'Edit Tags', edit_picture_path(picture) %></td>
+  </tr>
+<% end %>
+</table>
+<% end %>

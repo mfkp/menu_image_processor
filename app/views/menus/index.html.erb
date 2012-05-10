@@ -1,0 +1,21 @@
+<h1>Menus</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Path</th>
+    <th>Delete</th>
+  </tr>
+
+<% @menus.reverse.each do |menu| %>
+  <tr>
+    <td><%= link_to menu.name, menu %></td>
+    <td><%= menu.path %></td>
+    <td><%= link_to '[x]', menu, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'Upload New Menu', new_menu_path %>

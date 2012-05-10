@@ -1,0 +1,38 @@
+<p id="notice"><%= notice %></p>
+
+<h2><%= @menu.name %></h2>
+
+<p>
+  <b>Filename:</b>
+  <%= @menu.path %>
+</p>
+
+<table>
+	<tr>
+		<th>Row</th>
+		<th>Product Name</th>
+		<th>Image Name</th>
+		<th>Preview</th>
+	</tr>
+
+	<% @workbook.enum_for(:each_with_index).collect{ |row, index|  %>
+
+	<% if index > 0 %>
+		<tr>
+			<td><%= index %></td>
+			<td><%= row[2] %></td>
+			<td><%= row[8] %></td>
+			<% if row[8].present? %>
+			<td><%= link_to (image_tag "menu_items/#{row[8]}"), "/menus/#{@menu.id}/row/#{index}" %></td>
+			<% else %>
+			<td><%= link_to "Choose	", "/menus/#{@menu.id}/row/#{index}" %></td>
+			<% end %>
+		</tr>
+	<% end %>
+
+	<% } %>
+</table>
+
+<br/>
+<%= link_to 'Back', menus_path %> | <%= link_to 'All done? Download zip', :controller => 'menus', :action => 'download' %>
+<br/><br/>
