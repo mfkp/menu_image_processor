@@ -54,13 +54,12 @@ class MenusController < ApplicationController
 
     # sheets gem
     arr = Sheets::Base.new(tmp.path, :format => :xls).to_array
+    puts arr
     arr.each do |row|
-      if (row[8].empty?)
-        keywords = row[2].downcase.gsub(/s\b/, '').split(/\b\W*/)
-        exact = Picture.tagged_with(keywords)
-        if (exact.present?)
-          row[8] = exact.first.path
-        end
+      keywords = row[2].downcase.gsub(/s\b/, '').split(/\b\W*/)
+      exact = Picture.tagged_with(keywords)
+      if (exact.present?)
+        row[8] = exact.first.path
       end
     end
 
