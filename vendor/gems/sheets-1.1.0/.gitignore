@@ -1,0 +1,9 @@
+.DS_Store
+*.gem
+.bundle
+.vagrant
+Gemfile.lock
+pkg/*
+doc/*
+log/*
+*.rbc

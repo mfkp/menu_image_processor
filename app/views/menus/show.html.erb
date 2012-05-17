@@ -20,11 +20,12 @@
 	<% if index > 0 %>
 		<tr>
 			<td><%= index %></td>
-			<td><%= row[2] %></td>
-			<td><%= row[8] %></td>
-			<% if row[8].present? %>
-			<td><%= link_to (image_tag "menu_items/#{row[8]}"), "/menus/#{@menu.id}/row/#{index}" %></td>
+			<td><%= row[2].value %></td>
+			<% if !row[8].nil? %>
+			<td><%= row[8].value %></td>
+			<td><%= link_to (image_tag "menu_items/#{row[8].value}"), "/menus/#{@menu.id}/row/#{index}" %></td>
 			<% else %>
+			<td>&nbsp;</td>
 			<td><%= link_to "Choose	", "/menus/#{@menu.id}/row/#{index}" %></td>
 			<% end %>
 		</tr>
