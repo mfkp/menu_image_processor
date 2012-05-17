@@ -178,7 +178,7 @@ class MenusController < ApplicationController
     end
 
     #zip it up
-    archive = File.join('#{Rails.public_path}/menus/',File.basename(menu.path))+'.zip'
+    archive = File.join("#{Rails.public_path}/menus/",File.basename(menu.path))+'.zip'
     FileUtils.rm archive, :force=>true
     Zip::ZipFile.open(archive, 'w') do |zipfile|
       Dir["#{foldername}/**/**"].reject{|f|f==archive}.each do |file|
