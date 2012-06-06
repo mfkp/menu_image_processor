@@ -179,7 +179,8 @@ class MenusController < ApplicationController
     end
 
     #zip it up
-    archive = File.join("#{Rails.public_path}/menus/",File.basename(menu.path))+'.zip'
+    # Remove the trailing .xls or .xlsx (planned) from the file name - this creates issues with the portal.
+    archive = File.join("#{Rails.public_path}/menus/",File.basename(menu.path.gsub(/(.xls|.xlsx)\b/, '')))+'.zip'
     FileUtils.rm archive, :force=>true
     Zip::ZipFile.open(archive, 'w') do |zipfile|
       Dir["#{foldername}/**/**"].reject{|f|f==archive}.each do |file|
@@ -190,7 +191,7 @@ class MenusController < ApplicationController
     
 
     respond_to do |format|
-      format.html { send_file(archive, :filename => menu.path + ".zip", :type => 'application/zip') }
+      format.html { send_file(archive, :filename => menu.path.gsub(/(.xls|.xlsx)\b/, '') + ".zip", :type => 'application/zip') }
     end
   end
 
