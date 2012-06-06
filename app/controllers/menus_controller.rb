@@ -118,7 +118,8 @@ class MenusController < ApplicationController
 
     @keywords = remove_blacklist(@row[2].downcase.gsub(/[^a-z ]/, '').gsub(/s\b/, '').strip.split(/\b\W*/))
     @exact = Picture.tagged_with(@keywords)
-    @close = Picture.tagged_with(@keywords, :any => true)
+    # Close matches will be more useful if we sort by number of matches
+    @close = Picture.tagged_with(@keywords, :any => true).sort_by! { |o| -(@keywords & o.tag_list).length }
     @maybe = Picture.tagged_with(@keywords, :any => true, :wild => true)
 
     @maybe = @maybe - @close - @exact
@@ -187,8 +188,6 @@ class MenusController < ApplicationController
         zipfile.add(file.sub(foldername+'/',''),file)
       end
     end
-
-    
 
     respond_to do |format|
       format.html { send_file(archive, :filename => menu.path.gsub(/(.xls|.xlsx)\b/, '') + ".zip", :type => 'application/zip') }
