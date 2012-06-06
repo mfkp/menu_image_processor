@@ -7,7 +7,15 @@ task :load_images => :environment do
 		while (filename = d.read) do 
 			if (File.file?(d.path + filename))
 				formatted = filename.sub(/\..*/, '').gsub(/_/, ' ').downcase
-				taglist = formatted.gsub(/\d/, '').gsub(/s\b/, '').strip.gsub(/ /, ', ')
+				#taglist = formatted.gsub(/\d/, '').gsub(/s\b/, '').strip.gsub(/ /, ', ')
+				taglist = formatted.gsub(/[^a-z ]/, '').gsub(/s\b/, '').strip.split(/\b\W*/)
+				tags_blacklist = ['a', 'al', 'and', 'e', 'in', 'le', 'n', 'of', 'on', 'the', 'with']
+    			tags_blacklist.each do |word|
+    				if taglist.include? word
+        				taglist.delete(word)
+      				end
+    			end
+    			taglist = taglist.join(', ')
 				path = d.path.sub("app/assets/images/menu_items/","")
 				if (Picture.find_by_path(path + filename).nil?)
 					pic = Picture.new(:name => formatted, :path => path + filename)

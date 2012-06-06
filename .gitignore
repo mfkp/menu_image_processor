@@ -18,3 +18,9 @@
 public/uploads/*
 public/menus/*
 *.DS_Store
+
+/vendor/bin
+/vendor/cache
+/vendor/doc
+/vendor/gems
+/vendor/specifications

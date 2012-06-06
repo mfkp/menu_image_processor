@@ -11,6 +11,7 @@
 	<tr>
 		<th>Row</th>
 		<th>Product Name</th>
+		<th>Product Description</th>
 		<th>Image Name</th>
 		<th>Preview</th>
 	</tr>
@@ -21,6 +22,7 @@
 		<tr>
 			<td><%= index %></td>
 			<td><%= row[2] %></td>
+			<td><%= row[3] %></td>
 			<td><%= row[8] %></td>
 			<% if row[8].present? %>
 			<td><%= link_to (image_tag "menu_items/#{row[8]}"), "/menus/#{@menu.id}/row/#{index}" %></td>
