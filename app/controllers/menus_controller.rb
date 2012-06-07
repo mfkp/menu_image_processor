@@ -56,7 +56,7 @@ class MenusController < ApplicationController
     arr = Sheets::Base.new(tmp.path, :format => :xls).to_array
     arr.each do |row|
       if row[2].present?
-        keywords = remove_blacklist(row[2].downcase.gsub(/[^a-z ]/, '').gsub(/s\b/, '').split(/\b\W*/))
+        keywords = Menu.remove_blacklist(row[2].downcase.gsub(/[^a-z ]/, '').gsub(/s\b/, '').split(/\b\W*/))
         exact = Picture.tagged_with(keywords)
         if (exact.present?)
           row[8] = exact.first.path
@@ -116,7 +116,7 @@ class MenusController < ApplicationController
     @row = workbook[params[:number].to_i]
     @index = params[:number]
 
-    @keywords = remove_blacklist(@row[2].downcase.gsub(/[^a-z ]/, '').gsub(/s\b/, '').strip.split(/\b\W*/))
+    @keywords = Menu.remove_blacklist(@row[2].downcase.gsub(/[^a-z ]/, '').gsub(/s\b/, '').strip.split(/\b\W*/))
     @exact = Picture.tagged_with(@keywords)
     # Close matches will be more useful if we sort by number of matches
     @close = Picture.tagged_with(@keywords, :any => true).sort_by! { |o| -(@keywords & o.tag_list).length }
@@ -192,17 +192,6 @@ class MenusController < ApplicationController
     respond_to do |format|
       format.html { send_file(archive, :filename => menu.path.gsub(/(.xls|.xlsx)\b/, '') + ".zip", :type => 'application/zip') }
     end
-  end
-
-  def remove_blacklist(keywords)
-    # A collection of words to blacklist as tags
-    tags_blacklist = ['a', 'al', 'and', 'e', 'in', 'le', 'n', 'of', 'on', 'the', 'with']
-    tags_blacklist.each do |word|
-      if keywords.include? word
-        keywords.delete(word)
-      end
-    end
-    return keywords
   end
 
 end
