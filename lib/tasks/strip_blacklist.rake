@@ -10,7 +10,7 @@ task :strip_blacklist => :environment do
 			tag.gsub!(/[^a-z]/, '')
 		end
 		# Update the tags
-		picture.save
+		picture.update_attribute(:tag_list, picture.tag_list.join(', '))
 		puts "Updated ##{picture.id}: #{picture.name}"
 	end
 	puts "Done."
