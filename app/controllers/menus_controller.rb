@@ -56,7 +56,7 @@ class MenusController < ApplicationController
     arr = Sheets::Base.new(tmp.path, :format => :xls).to_array
     arr.each do |row|
       if row[2].present?
-        keywords = row[2].downcase.gsub(/s\b/, '').split(/\b\W*/)
+        keywords = remove_blacklist(row[2].downcase.gsub(/[^a-z ]/, '').gsub(/s\b/, '').split(/\b\W*/))
         exact = Picture.tagged_with(keywords)
         if (exact.present?)
           row[8] = exact.first.path
@@ -115,12 +115,12 @@ class MenusController < ApplicationController
     workbook = Sheets::Base.new(File.join("#{Rails.public_path}/uploads", @menu.path), :format => :xls).to_array
     @row = workbook[params[:number].to_i]
     @index = params[:number]
-    product_name = @row[2]
 
-    keywords = product_name.downcase.gsub(/s\b/, '').split(/\b\W*/)
-    @exact = Picture.tagged_with(keywords)
-    @close = Picture.tagged_with(keywords, :any => true)
-    @maybe = Picture.tagged_with(keywords, :any => true, :wild => true)
+    @keywords = remove_blacklist(@row[2].downcase.gsub(/[^a-z ]/, '').gsub(/s\b/, '').strip.split(/\b\W*/))
+    @exact = Picture.tagged_with(@keywords)
+    # Close matches will be more useful if we sort by number of matches
+    @close = Picture.tagged_with(@keywords, :any => true).sort_by! { |o| -(@keywords & o.tag_list).length }
+    @maybe = Picture.tagged_with(@keywords, :any => true, :wild => true)
 
     @maybe = @maybe - @close - @exact
     @close = @close - @exact
@@ -137,7 +137,8 @@ class MenusController < ApplicationController
     arr = Sheets::Base.new(File.join("#{Rails.public_path}/uploads", @menu.path), :format => :xls).to_array
 
     #add new tags
-    taglist = arr[params[:number].to_i][2].sub(/\..*/, '').gsub(/_/, ' ').downcase.gsub(/\d/, '').gsub(/s\b/, '').strip.split(' ')
+    #taglist = arr[params[:number].to_i][2].sub(/\..*/, '').gsub(/_/, ' ').downcase.gsub(/\d/, '').gsub(/s\b/, '').strip.split(' ')
+    taglist = remove_blacklist(arr[params[:number].to_i][2].downcase.gsub(/[^a-z ]/, '').gsub(/s\b/, '').strip.split(/\b\W*/))
     taglist.each do |tag|
       picture.tag_list.push tag
     end
@@ -179,7 +180,8 @@ class MenusController < ApplicationController
     end
 
     #zip it up
-    archive = File.join("#{Rails.public_path}/menus/",File.basename(menu.path))+'.zip'
+    # Remove the trailing .xls or .xlsx (planned) from the file name - this creates issues with the portal.
+    archive = File.join("#{Rails.public_path}/menus/",File.basename(menu.path.gsub(/(.xls|.xlsx)\b/, '')))+'.zip'
     FileUtils.rm archive, :force=>true
     Zip::ZipFile.open(archive, 'w') do |zipfile|
       Dir["#{foldername}/**/**"].reject{|f|f==archive}.each do |file|
@@ -187,11 +189,20 @@ class MenusController < ApplicationController
       end
     end
 
-    
-
     respond_to do |format|
-      format.html { send_file(archive, :filename => menu.path + ".zip", :type => 'application/zip') }
+      format.html { send_file(archive, :filename => menu.path.gsub(/(.xls|.xlsx)\b/, '') + ".zip", :type => 'application/zip') }
     end
+  end
+
+  def remove_blacklist(keywords)
+    # A collection of words to blacklist as tags
+    tags_blacklist = ['a', 'al', 'and', 'e', 'in', 'le', 'n', 'of', 'on', 'the', 'with']
+    tags_blacklist.each do |word|
+      if keywords.include? word
+        keywords.delete(word)
+      end
+    end
+    return keywords
   end
 
 end
