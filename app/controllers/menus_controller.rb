@@ -119,7 +119,7 @@ class MenusController < ApplicationController
     @keywords = Menu.remove_blacklist(@row[2].downcase.gsub(/[^a-z ]/, '').gsub(/s\b/, '').strip.split(/\b\W*/))
     @exact = Picture.tagged_with(@keywords)
     # Close matches will be more useful if we sort by number of matches
-    @close = Picture.tagged_with(@keywords, :any => true).sort_by! { |o| -(@keywords & o.tag_list).length }
+    @close = Picture.tagged_with(@keywords, :any => true).sort_by { |o| -(@keywords & o.tag_list).length }
     @maybe = Picture.tagged_with(@keywords, :any => true, :wild => true)
 
     @maybe = @maybe - @close - @exact
@@ -167,6 +167,7 @@ class MenusController < ApplicationController
     #copy all the images and fix the image paths
     arr.each_with_index do |row, index|
       if index > 0 && row[8].present?
+        "#{Rails.root}/app/assets/images/menu_items/" + row[8]
         FileUtils.cp "#{Rails.root}/app/assets/images/menu_items/" + row[8], foldername
         row[8] = row[8].match(/([^\/]*)$/)[0] #just strips off the directories after it's copied
       end
