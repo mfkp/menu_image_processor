@@ -167,8 +167,9 @@ class MenusController < ApplicationController
     #copy all the images and fix the image paths
     arr.each_with_index do |row, index|
       if index > 0 && row[8].present?
-        "#{Rails.root}/app/assets/images/menu_items/" + row[8]
-        FileUtils.cp "#{Rails.root}/app/assets/images/menu_items/" + row[8], foldername
+        if Picture.find_by_path(row[8]).present?
+          FileUtils.cp "#{Rails.root}/app/assets/images/menu_items/" + row[8], foldername
+        end
         row[8] = row[8].match(/([^\/]*)$/)[0] #just strips off the directories after it's copied
       end
     end
