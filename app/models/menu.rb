@@ -36,14 +36,12 @@ class Menu < ActiveRecord::Base
         workbook = RubyXL::Parser.parse(file, :skip_filename_check => true)
       end
 
-      #Rails.logger = Logger.new(STDOUT)
       arr.each_with_index do |row, index|
         begin
           workbook.worksheets[0][index][8].change_content(row[8])
         rescue NoMethodError
           begin
             workbook.worksheets[0].add_cell(index, 8, row[8])
-            #logger.debug(row[2].to_s + ' ' + index.to_s)
           # These errors are generally thrown when a nil value somehow
           # makes it way into the worksheet array. This is usually the
           # end of the file, so we can just break the loop.
