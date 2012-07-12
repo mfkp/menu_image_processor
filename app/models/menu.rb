@@ -16,6 +16,7 @@ class Menu < ActiveRecord::Base
       if opts[:tmp_path].nil?
         arr = RubyXL::Parser.parse(File.join("#{Rails.public_path}/uploads", path)).worksheets[0].extract_data
       else
+        # When a menu is being created, we need to pass in the tmp file path
         arr = RubyXL::Parser.parse(opts[:tmp_path], :skip_filename_check => true).worksheets[0].extract_data
       end
     else

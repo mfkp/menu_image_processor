@@ -77,7 +77,18 @@ module RubyXL
 
         #will be nil if these files do not exist
         wb.external_links = files['externalLinks']
+
+        ######
+        # Patched by Todd
+        # This block throws a bizarre error in this version of RubyXL
+        # This was supposedly patched in RubyXL 1.2.8, but it introduces
+        # new errors from within the library that I haven't been able to
+        # track down.
+        ######
+        
         #wb.drawings = files['drawings']
+        
+
         wb.printer_settings = files['printerSettings']
         wb.worksheet_rels = files['worksheetRels']
         wb.macros = files['vbaProject']
@@ -206,6 +217,14 @@ module RubyXL
           wb.worksheets[i].extLst=nil
         end
         #extLst
+
+        ######
+        # Patched by Todd
+        # This block throws a bizarre error in this version of RubyXL
+        # This was supposedly patched in RubyXL 1.2.8, but it introduces
+        # new errors from within the library that I haven't been able to
+        # track down.
+        ######
 
         ##legacy drawing##
         #legacy_drawing_node = files[j].xpath('/xmlns:worksheet/xmlns:legacyDrawing',namespaces)
@@ -350,6 +369,14 @@ module RubyXL
             end
           end
         end
+
+        ######
+        # Patched by Todd
+        # This block throws a bizarre error in this version of RubyXL
+        # This was supposedly patched in RubyXL 1.2.8, but it introduces
+        # new errors from within the library that I haven't been able to
+        # track down.
+        ######
 
         #if File.directory?(File.join(dir_path,'xl','drawings'))
         #  files['drawings'] = {}
