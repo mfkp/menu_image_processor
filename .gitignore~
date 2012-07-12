@@ -22,6 +22,5 @@ public/menus/*
 /vendor/bin
 /vendor/cache
 /vendor/doc
-/vendor/gems/*
-!/vendor/gems/rubyXL-1.2.7/
+/vendor/gems
 /vendor/specifications
