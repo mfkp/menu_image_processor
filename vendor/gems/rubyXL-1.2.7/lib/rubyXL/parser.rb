@@ -77,7 +77,7 @@ module RubyXL
 
         #will be nil if these files do not exist
         wb.external_links = files['externalLinks']
-        wb.drawings = files['drawings']
+        #wb.drawings = files['drawings']
         wb.printer_settings = files['printerSettings']
         wb.worksheet_rels = files['worksheetRels']
         wb.macros = files['vbaProject']
@@ -208,12 +208,12 @@ module RubyXL
         #extLst
 
         ##legacy drawing##
-        legacy_drawing_node = files[j].xpath('/xmlns:worksheet/xmlns:legacyDrawing',namespaces)
-        unless legacy_drawing_node.empty?
-          wb.worksheets[i].legacy_drawing = Hash.xml_node_to_hash(legacy_drawing_node.first)
-        else
-          wb.worksheets[i].legacy_drawing = nil
-        end
+        #legacy_drawing_node = files[j].xpath('/xmlns:worksheet/xmlns:legacyDrawing',namespaces)
+        #unless legacy_drawing_node.empty?
+        #  wb.worksheets[i].legacy_drawing = Hash.xml_node_to_hash(legacy_drawing_node.first)
+        #else
+        #  wb.worksheets[i].legacy_drawing = nil
+        #end
         ##end legacy drawing
       end
 
@@ -351,15 +351,15 @@ module RubyXL
           end
         end
 
-        if File.directory?(File.join(dir_path,'xl','drawings'))
-          files['drawings'] = {}
-          drawings_path = File.join(dir_path,'xl','drawings','_rels')
-          Dir.mkdir(drawings_path)
-          dir = Dir.new(drawings_path).entries.reject {|f| [".", "..", ".DS_Store"].include? f}
-          dir.each_with_index do |draw,i|
-            files['drawings'][i+1] = File.read(File.join(drawings_path,draw))
-          end
-        end
+        #if File.directory?(File.join(dir_path,'xl','drawings'))
+        #  files['drawings'] = {}
+        #  drawings_path = File.join(dir_path,'xl','drawings','_rels')
+        #  Dir.mkdir(drawings_path)
+        #  dir = Dir.new(drawings_path).entries.reject {|f| [".", "..", ".DS_Store"].include? f}
+        #  dir.each_with_index do |draw,i|
+        #    files['drawings'][i+1] = File.read(File.join(drawings_path,draw))
+        #  end
+        #end
 
         if File.directory?(File.join(dir_path,'xl','printerSettings'))
           files['printerSettings'] = {}
