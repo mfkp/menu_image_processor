@@ -2,7 +2,7 @@ class MenusController < ApplicationController
   # GET /menus
   # GET /menus.json
   def index
-    @menus = Menu.all
+    @menus = Menu.paginate(:page => params[:page], :per_page => 20).order('id DESC')
 
     respond_to do |format|
       format.html # index.html.erb
