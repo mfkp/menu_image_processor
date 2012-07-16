@@ -2,16 +2,14 @@
 
 <table>
   <tr>
-    <th>Name</th>
-    <th>Path</th>
+    <th>Menu</th>
     <th>Delete</th>
   </tr>
 
 <% @menus.each do |menu| %>
   <tr>
-    <td><%= link_to menu.name, menu %></td>
-    <td><%= menu.path %></td>
-    <td><%= link_to '[x]', menu, :confirm => 'Are you sure?', :method => :delete %></td>
+    <td><%= link_to menu.path, menu %></td>
+    <td style="text-align:center;"><%= link_to '[x]', menu, :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <% end %>
 </table>

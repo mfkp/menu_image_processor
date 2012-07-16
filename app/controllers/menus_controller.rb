@@ -42,9 +42,16 @@ class MenusController < ApplicationController
   # POST /menus.json
   def create
     @menu = Menu.new
-    @menu.name = params[:menu][:name]
     @menu.path = params[:menu][:spreadsheet].original_filename.gsub(/\s/, '_')
     file = File.join("#{Rails.public_path}/uploads", @menu.path)
+    if File.exist?(file)
+      number = 0
+      begin
+        number += 1
+        @menu.path = "#{number}-" + params[:menu][:spreadsheet].original_filename.gsub(/\s/, '_')
+        file = File.join("#{Rails.public_path}/uploads", @menu.path)
+      end while File.exist?(file)
+    end
 
     require 'fileutils'
     tmp = params[:menu][:spreadsheet].tempfile

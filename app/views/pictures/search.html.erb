@@ -1,3 +1,8 @@
+<% if @exact.empty? && @close.empty? && @maybe.empty? %>
+  <p>Sorry, no results. What the heck are you searching for?</p>
+  <p><%= link_to 'Search Again', '/pictures/search' %></p>
+<% end %>
+
 <% if @exact.present? %>
 <h1>Best Bet</h1>
 
