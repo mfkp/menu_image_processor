@@ -14,8 +14,10 @@ gem 'acts-as-taggable-on'
 gem 'sheets'
 gem 'nokogiri'
 gem 'rubyzip'
-
 gem 'will_paginate', '~> 3.0'
+
+# Trying new version of RubyXL
+gem 'rubyXL', :path => "vendor/gems/rubyXL-1.2.7"
 
 # Gems used only for assets and not required
 # in production environments by default.

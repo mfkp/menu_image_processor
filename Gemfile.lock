@@ -1,3 +1,8 @@
+PATH
+  remote: vendor/gems/rubyXL-1.2.7
+  specs:
+    rubyXL (1.2.7)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -126,6 +131,7 @@ DEPENDENCIES
   mysql
   nokogiri
   rails (= 3.2.2)
+  rubyXL!
   rubyzip
   sass-rails (~> 3.2.3)
   sheets

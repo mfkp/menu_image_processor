@@ -14,9 +14,7 @@ class MenusController < ApplicationController
   # GET /menus/1.json
   def show
     @menu = Menu.find(params[:id])
-    @workbook = Sheets::Base.new("#{Rails.public_path}/uploads/"+ @menu.path)
-    # @workbook = Excelx.new("public/uploads/"+ @menu.path)
-    # @workbook = RubyXL::Parser.parse("public/uploads/"+ @menu.path)
+    @workbook = @menu.to_array
 
     respond_to do |format|
       format.html # show.html.erb
@@ -52,8 +50,8 @@ class MenusController < ApplicationController
     tmp = params[:menu][:spreadsheet].tempfile
     #FileUtils.mv tmp.path, file
 
-    # sheets gem
-    arr = Sheets::Base.new(tmp.path, :format => :xls).to_array
+    arr = @menu.to_array(:tmp_path => tmp.path)
+
     arr.each do |row|
       if row[2].present?
         keywords = Menu.remove_blacklist(row[2].downcase.gsub(/[^a-z ]/, '').gsub(/s\b/, '').split(/\b\W*/))
@@ -64,11 +62,7 @@ class MenusController < ApplicationController
       end
     end
 
-    workbook = Sheets::Base.new(arr)
-    File.open("#{Rails.public_path}/uploads/#{@menu.path}", 'w') do |f|
-      f.puts workbook.to_xls
-      f.close
-    end
+    @menu.write_workbook(arr, :tmp_path => tmp.path)
 
     respond_to do |format|
       if @menu.save
@@ -112,7 +106,7 @@ class MenusController < ApplicationController
   # GET /menus/1/rows/13
   def edit_row
     @menu = Menu.find(params[:id])
-    workbook = Sheets::Base.new(File.join("#{Rails.public_path}/uploads", @menu.path), :format => :xls).to_array
+    workbook = @menu.to_array
     @row = workbook[params[:number].to_i]
     @index = params[:number]
 
@@ -134,10 +128,8 @@ class MenusController < ApplicationController
   def update_row
     @menu = Menu.find(params[:id])
     picture = Picture.find(params[:picture_id])
-    arr = Sheets::Base.new(File.join("#{Rails.public_path}/uploads", @menu.path), :format => :xls).to_array
-
+    arr = @menu.to_array
     #add new tags
-    #taglist = arr[params[:number].to_i][2].sub(/\..*/, '').gsub(/_/, ' ').downcase.gsub(/\d/, '').gsub(/s\b/, '').strip.split(' ')
     taglist = Menu.remove_blacklist(arr[params[:number].to_i][2].downcase.gsub(/[^a-z ]/, '').gsub(/s\b/, '').strip.split(/\b\W*/))
     taglist.each do |tag|
       picture.tag_list.push tag
@@ -147,11 +139,8 @@ class MenusController < ApplicationController
 
     #set new image path
     arr[params[:number].to_i][8] = picture.path
-    workbook = Sheets::Base.new(arr)
-    File.open("#{Rails.public_path}/uploads/#{@menu.path}", 'w') do |f|
-      f.puts workbook.to_xls
-      f.close
-    end
+
+    @menu.write_workbook(arr)
 
     respond_to do |format|
       format.html { redirect_to @menu }
@@ -162,7 +151,8 @@ class MenusController < ApplicationController
     foldername = "#{Rails.public_path}/menus/menu#{Time.now.to_i.to_s}/"
     FileUtils.mkdir foldername
     menu = Menu.find(params[:id])
-    arr = Sheets::Base.new("#{Rails.public_path}/uploads/"+ menu.path).to_array
+
+    arr = menu.to_array
 
     #copy all the images and fix the image paths
     arr.each_with_index do |row, index|
@@ -174,12 +164,7 @@ class MenusController < ApplicationController
       end
     end
 
-    #write the excel file
-    workbook = Sheets::Base.new(arr)
-    File.open(foldername + menu.path, 'w') do |f|
-      f.puts workbook.to_xls
-      f.close
-    end
+    menu.write_workbook(arr, :folder_name => foldername)
 
     #zip it up
     # Remove the trailing .xls or .xlsx (planned) from the file name - this creates issues with the portal.
@@ -195,5 +180,4 @@ class MenusController < ApplicationController
       format.html { send_file(archive, :filename => menu.path.gsub(/(.xls|.xlsx)\b/, '') + ".zip", :type => 'application/zip') }
     end
   end
-
 end
