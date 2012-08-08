@@ -61,7 +61,7 @@ class MenusController < ApplicationController
 
     arr.each do |row|
       if row[2].present?
-        keywords = Menu.remove_blacklist(row[2].downcase.gsub(/[^a-z ]/, '').gsub(/s\b/, '').split(/\b\W*/))
+        keywords = Menu.remove_blacklist(row[2].to_s.downcase.gsub(/[^a-z ]/, '').gsub(/s\b/, '').split(/\b\W*/))
         exact = Picture.tagged_with(keywords)
         if (exact.present?)
           row[8] = exact.first.path
@@ -117,7 +117,7 @@ class MenusController < ApplicationController
     @row = workbook[params[:number].to_i]
     @index = params[:number]
 
-    @keywords = Menu.remove_blacklist(@row[2].downcase.gsub(/[^a-z ]/, '').gsub(/s\b/, '').strip.split(/\b\W*/))
+    @keywords = Menu.remove_blacklist(@row[2].to_s.downcase.gsub(/[^a-z ]/, '').gsub(/s\b/, '').strip.split(/\b\W*/))
     @exact = Picture.tagged_with(@keywords)
     # Close matches will be more useful if we sort by number of matches
     @close = Picture.tagged_with(@keywords, :any => true).sort_by { |o| -(@keywords & o.tag_list).length }
