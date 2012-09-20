@@ -7,7 +7,7 @@ gem 'rails', '3.2.2'
 
 gem 'sqlite3'
 gem 'mysql'
-
+gem 'activerecord-mysql2-adapter'
 gem 'json'
 
 gem 'acts-as-taggable-on'
@@ -47,3 +47,6 @@ gem 'jquery-rails'
 
 # To use debugger
 # gem 'ruby-debug'
+
+gem 'unicorn'
+gem 'unicorn-rails'
